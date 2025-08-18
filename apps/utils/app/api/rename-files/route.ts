@@ -4,9 +4,9 @@ import path from 'path';
 
 export async function POST(request: NextRequest) {
   try {
-    const { oldExtension, newExtension, files } = await request.json();
+    const { oldExtensions, newExtension, files } = await request.json();
 
-    if (!oldExtension || !newExtension || !files || !Array.isArray(files)) {
+    if (!oldExtensions || !Array.isArray(oldExtensions) || oldExtensions.length === 0 || !newExtension || !files || !Array.isArray(files)) {
       return NextResponse.json(
         { error: '缺少必要参数' },
         { status: 400 }
@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
 
     for (const file of files) {
       try {
-        if (file.oldExtension === oldExtension) {
-          const newName = file.name.replace(`.${oldExtension}`, `.${newExtension}`);
+        if (oldExtensions.includes(file.oldExtension)) {
+          const newName = file.name.replace(`.${file.oldExtension}`, `.${newExtension}`);
           
           // 模拟重命名成功
           results.push({
