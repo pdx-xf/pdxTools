@@ -10,12 +10,13 @@ const Header: React.FC<any> = () => {
 
   const TAB_LIST = [
     { name: "逗号分隔链接字符串", path: "/" },
+    { name: "eBay图片链接转换", path: "/ebay-image-converter" },
+    { name: "批量修改文件后缀名", path: "/file-extension-changer" },
     { name: "地图经纬度转换", path: "/map-convert" },
     { name: "图片预览", path: "/image-preview" },
     { name: "URL Decode&Encode", path: "/url-decode-encode" },
     { name: "颜色值转换", path: "/color-convert" },
     { name: "正则表达式提取文本", path: "/regex-extract-text" },
-    { name: "批量修改文件后缀名", path: "/file-extension-changer" },
   ];
 
   return (
