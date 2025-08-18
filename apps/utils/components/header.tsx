@@ -15,6 +15,7 @@ const Header: React.FC<any> = () => {
     { name: "URL Decode&Encode", path: "/url-decode-encode" },
     { name: "颜色值转换", path: "/color-convert" },
     { name: "正则表达式提取文本", path: "/regex-extract-text" },
+    { name: "批量修改文件后缀名", path: "/file-extension-changer" },
   ];
 
   return (
