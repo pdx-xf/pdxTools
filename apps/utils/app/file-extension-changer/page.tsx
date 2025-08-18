@@ -476,23 +476,23 @@ Read-Host "Press Enter to continue"`;
               </div>
             </video>
           </div>
-                     <div className="text-sm text-muted-foreground space-y-2">
-             <p>💡 提示：观看演示视频可以帮助您快速掌握使用方法</p>
-             <p>🎥 视频说明：</p>
-             <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
-               <li>视频格式：MP4高清格式，支持所有现代浏览器</li>
-               <li>播放控制：支持播放、暂停、音量调节、全屏等</li>
-               <li>字幕支持：提供中文字幕，便于理解操作步骤</li>
-               <li>响应式设计：在电脑、平板、手机上都能正常播放</li>
-             </ul>
-             <p>🔧 功能说明：</p>
-             <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
-               <li>智能后缀名检测：自动识别文件夹中的所有文件类型</li>
-               <li>多后缀名选择：支持同时修改多种文件格式</li>
-               <li>平台智能识别：自动下载适合您操作系统的脚本</li>
-               <li>文件预览：在重命名前预览所有将要修改的文件</li>
-             </ul>
-           </div>
+          <div className="text-sm text-muted-foreground space-y-2">
+            <p>💡 提示：观看演示视频可以帮助您快速掌握使用方法</p>
+            <p>🎥 视频说明：</p>
+            <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
+              <li>视频格式：MP4高清格式，支持所有现代浏览器</li>
+              <li>播放控制：支持播放、暂停、音量调节、全屏等</li>
+              <li>字幕支持：提供中文字幕，便于理解操作步骤</li>
+              <li>响应式设计：在电脑、平板、手机上都能正常播放</li>
+            </ul>
+            <p>🔧 功能说明：</p>
+            <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
+              <li>智能后缀名检测：自动识别文件夹中的所有文件类型</li>
+              <li>多后缀名选择：支持同时修改多种文件格式</li>
+              <li>平台智能识别：自动下载适合您操作系统的脚本</li>
+              <li>文件预览：在重命名前预览所有将要修改的文件</li>
+            </ul>
+          </div>
         </div>
       )}
 
@@ -712,33 +712,6 @@ Read-Host "Press Enter to continue"`;
               ))}
             </div>
           </div>
-
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <AlertCircle className="w-4 h-4" />
-            <span>
-              {previewMode
-                ? "预览模式：文件尚未实际重命名，点击下方按钮开始处理"
-                : "文件已准备就绪，可以下载脚本执行重命名操作"}
-            </span>
-          </div>
-
-          <Button
-            onClick={processFiles}
-            disabled={isProcessing}
-            className="w-full"
-            size="lg"
-          >
-            {isProcessing ? (
-              <>
-                <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                处理中...
-              </>
-            ) : previewMode ? (
-              "预览文件更改"
-            ) : (
-              "下载重命名脚本"
-            )}
-          </Button>
         </div>
       )}
 
@@ -775,9 +748,9 @@ Read-Host "Press Enter to continue"`;
             🔍
             智能检测：系统会自动扫描文件夹，识别所有可用的文件后缀名，无需手动输入
           </p>
-                     <p className="text-orange-600 dark:text-orange-400">
-             🎥 视频演示：点击"观看使用演示"按钮，观看高清操作演示视频
-           </p>
+          <p className="text-orange-600 dark:text-orange-400">
+            🎥 视频演示：点击"观看使用演示"按钮，观看高清操作演示视频
+          </p>
         </div>
       </div>
     </div>
