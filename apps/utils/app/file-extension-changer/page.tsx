@@ -10,6 +10,8 @@ import {
   RefreshCw,
   Download,
   AlertCircle,
+  Play,
+  Video,
 } from "lucide-react";
 
 // 扩展HTMLInputElement类型以支持webkitdirectory属性
@@ -46,6 +48,7 @@ const FileExtensionChanger = () => {
     "windows" | "mac" | "linux" | "unknown"
   >("unknown");
   const [availableExtensions, setAvailableExtensions] = useState<string[]>([]);
+  const [showVideo, setShowVideo] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // 检测用户平台
@@ -404,6 +407,7 @@ Read-Host "Press Enter to continue"`;
     setNewExtension("");
     setAvailableExtensions([]);
     setPreviewMode(true);
+    setShowVideo(false);
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
@@ -418,7 +422,79 @@ Read-Host "Press Enter to continue"`;
         <p className="text-muted-foreground">
           选择文件夹，批量修改多种文件后缀名为统一格式
         </p>
+        <div className="flex justify-center">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setShowVideo(!showVideo)}
+            className="flex items-center gap-2"
+          >
+            <Video className="w-4 h-4" />
+            {showVideo ? "隐藏使用演示" : "观看使用演示"}
+          </Button>
+        </div>
       </div>
+
+      {/* 视频演示区域 */}
+      {showVideo && (
+        <div className="bg-card p-6 rounded-lg border space-y-4">
+          <h2 className="text-xl font-semibold flex items-center gap-2">
+            <Play className="w-5 h-5" />
+            使用演示视频
+          </h2>
+          <div className="aspect-video bg-muted rounded-lg overflow-hidden">
+            <video
+              className="w-full h-full object-cover"
+              controls
+              preload="metadata"
+              poster="/videos/video-poster.jpg"
+            >
+              <source
+                src="/videos/a6e0bce67e22d26d04b016042ccc381a.mp4"
+                type="video/mp4"
+              />
+              <source
+                src="/videos/a6e0bce67e22d26d04b016042ccc381a.mp4"
+                type="video/webm"
+              />
+              <track
+                kind="subtitles"
+                src="/videos/subtitles.vtt"
+                srcLang="zh-CN"
+                label="中文"
+              />
+              <div className="flex items-center justify-center h-full bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-blue-950 dark:to-indigo-900">
+                <div className="text-center space-y-4">
+                  <Video className="w-16 h-16 mx-auto text-muted-foreground" />
+                  <p className="text-lg font-medium">
+                    您的浏览器不支持视频播放
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    请升级到最新版本或使用现代浏览器
+                  </p>
+                </div>
+              </div>
+            </video>
+          </div>
+                     <div className="text-sm text-muted-foreground space-y-2">
+             <p>💡 提示：观看演示视频可以帮助您快速掌握使用方法</p>
+             <p>🎥 视频说明：</p>
+             <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
+               <li>视频格式：MP4高清格式，支持所有现代浏览器</li>
+               <li>播放控制：支持播放、暂停、音量调节、全屏等</li>
+               <li>字幕支持：提供中文字幕，便于理解操作步骤</li>
+               <li>响应式设计：在电脑、平板、手机上都能正常播放</li>
+             </ul>
+             <p>🔧 功能说明：</p>
+             <ul className="list-disc list-inside space-y-1 ml-4 text-xs">
+               <li>智能后缀名检测：自动识别文件夹中的所有文件类型</li>
+               <li>多后缀名选择：支持同时修改多种文件格式</li>
+               <li>平台智能识别：自动下载适合您操作系统的脚本</li>
+               <li>文件预览：在重命名前预览所有将要修改的文件</li>
+             </ul>
+           </div>
+        </div>
+      )}
 
       {/* 文件夹选择区域 */}
       <div className="bg-card p-6 rounded-lg border space-y-4">
@@ -699,6 +775,9 @@ Read-Host "Press Enter to continue"`;
             🔍
             智能检测：系统会自动扫描文件夹，识别所有可用的文件后缀名，无需手动输入
           </p>
+                     <p className="text-orange-600 dark:text-orange-400">
+             🎥 视频演示：点击"观看使用演示"按钮，观看高清操作演示视频
+           </p>
         </div>
       </div>
     </div>

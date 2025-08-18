@@ -1,16 +1,20 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { NextRequest, NextResponse } from "next/server";
+import { promises as fs } from "fs";
+import path from "path";
 
 export async function POST(request: NextRequest) {
   try {
     const { oldExtensions, newExtension, files } = await request.json();
 
-    if (!oldExtensions || !Array.isArray(oldExtensions) || oldExtensions.length === 0 || !newExtension || !files || !Array.isArray(files)) {
-      return NextResponse.json(
-        { error: '缺少必要参数' },
-        { status: 400 }
-      );
+    if (
+      !oldExtensions ||
+      !Array.isArray(oldExtensions) ||
+      oldExtensions.length === 0 ||
+      !newExtension ||
+      !files ||
+      !Array.isArray(files)
+    ) {
+      return NextResponse.json({ error: "缺少必要参数" }, { status: 400 });
     }
 
     // 由于浏览器安全限制，我们无法直接访问文件系统
@@ -21,13 +25,16 @@ export async function POST(request: NextRequest) {
     for (const file of files) {
       try {
         if (oldExtensions.includes(file.oldExtension)) {
-          const newName = file.name.replace(`.${file.oldExtension}`, `.${newExtension}`);
-          
+          const newName = file.name.replace(
+            `.${file.oldExtension}`,
+            `.${newExtension}`
+          );
+
           // 模拟重命名成功
           results.push({
             oldName: file.name,
             newName: newName,
-            success: true
+            success: true,
           });
         }
       } catch (error) {
@@ -42,17 +49,14 @@ export async function POST(request: NextRequest) {
       summary: {
         total: files.length,
         successful: results.length,
-        failed: errors.length
+        failed: errors.length,
       },
-      message: '由于浏览器安全限制，文件重命名操作需要下载脚本在本地执行。请使用下载的脚本文件来实际重命名文件。'
+      message:
+        "由于浏览器安全限制，文件重命名操作需要下载脚本在本地执行。请使用下载的脚本文件来实际重命名文件。",
     });
-
   } catch (error) {
-    console.error('文件重命名API错误:', error);
-    return NextResponse.json(
-      { error: '服务器内部错误' },
-      { status: 500 }
-    );
+    console.error("文件重命名API错误:", error);
+    return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }
 
@@ -60,11 +64,11 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const folderPath = searchParams.get('path');
+    const folderPath = searchParams.get("path");
 
     if (!folderPath) {
       return NextResponse.json(
-        { error: '缺少文件夹路径参数' },
+        { error: "缺少文件夹路径参数" },
         { status: 400 }
       );
     }
@@ -76,14 +80,14 @@ export async function GET(request: NextRequest) {
           try {
             const filePath = path.join(folderPath, fileName);
             const stat = await fs.stat(filePath);
-            
+
             if (stat.isFile()) {
               const ext = path.extname(fileName).slice(1);
               return {
                 name: fileName,
                 extension: ext,
                 size: stat.size,
-                modified: stat.mtime
+                modified: stat.mtime,
               };
             }
             return null;
@@ -94,25 +98,20 @@ export async function GET(request: NextRequest) {
       );
 
       const validFiles = fileStats.filter(Boolean);
-      
+
       return NextResponse.json({
         success: true,
         files: validFiles,
-        folderPath
+        folderPath,
       });
-
     } catch (error) {
       return NextResponse.json(
         { error: `无法读取文件夹: ${error}` },
         { status: 400 }
       );
     }
-
   } catch (error) {
-    console.error('获取文件夹内容API错误:', error);
-    return NextResponse.json(
-      { error: '服务器内部错误' },
-      { status: 500 }
-    );
+    console.error("获取文件夹内容API错误:", error);
+    return NextResponse.json({ error: "服务器内部错误" }, { status: 500 });
   }
 }
