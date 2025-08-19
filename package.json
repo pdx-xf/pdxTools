@@ -21,5 +21,8 @@
     "turbo": "^2.3.3"
   },
   "packageManager": "pnpm@8.15.6",
-  "name": "pdx-tools"
+  "name": "pdx-tools",
+  "dependencies": {
+    "@vercel/analytics": "^1.5.0"
+  }
 }
