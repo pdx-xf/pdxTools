@@ -66,17 +66,17 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
   };
 
   return (
-    <div className="container mx-auto p-6 max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-foreground">
+    <div className="container mx-auto p-4 sm:p-6 max-w-4xl mobile-container">
+      <div className="mb-6 sm:mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold mb-2 text-foreground">
           eBay图片链接转换器
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-sm sm:text-base text-muted-foreground">
           支持HTML img标签和纯链接，将eBay图片从webp格式转换为jpg格式
         </p>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4 sm:gap-6">
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-medium mb-2 text-foreground">
@@ -86,12 +86,12 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
               placeholder='<img src="https://i.ebayimg.com/images/g/kUYAAOSwzfZoO02Q/s-l1600.webp"/>'
               value={inputUrls}
               onChange={(e) => setInputUrls(e.target.value)}
-              rows={8}
+              rows={6}
               className="w-full p-3 border rounded-md font-mono text-sm bg-background text-foreground border-border focus:ring-2 focus:ring-ring focus:border-ring transition-colors"
             />
           </div>
 
-          <div className="flex gap-2">
+          <div className="flex flex-col sm:flex-row gap-2">
             <button
               onClick={convertUrls}
               disabled={isConverting || !inputUrls.trim()}
@@ -100,7 +100,7 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                   ? "请先输入要转换的链接"
                   : "点击将webp格式的eBay图片链接转换为jpg格式"
               }
-              className={`px-4 py-2 rounded-md transition-colors ${
+              className={`px-4 py-3 rounded-md transition-colors touch-feedback min-h-[44px] ${
                 isConverting || !inputUrls.trim()
                   ? "bg-gray-400 text-gray-200 cursor-not-allowed"
                   : "bg-primary text-primary-foreground hover:bg-primary/90"
@@ -111,14 +111,14 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
             <button
               onClick={loadExample}
               title="加载一些示例链接，帮助您了解支持的格式"
-              className="px-4 py-2 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground"
+              className="px-4 py-3 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground touch-feedback min-h-[44px]"
             >
               加载示例
             </button>
             <button
               onClick={clearAll}
               title="清空所有输入和输出内容"
-              className="px-4 py-2 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground"
+              className="px-4 py-3 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground touch-feedback min-h-[44px]"
             >
               清空
             </button>
@@ -126,7 +126,7 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
         </div>
 
         {outputUrls && (
-          <div className="space-y-6">
+          <div className="space-y-4 sm:space-y-6">
             {/* 原始文本结果 */}
             <div className="space-y-4">
               <div>
@@ -136,14 +136,14 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                 <textarea
                   value={outputUrls}
                   readOnly
-                  rows={8}
+                  rows={6}
                   className="w-full p-3 border rounded-md font-mono text-sm bg-background text-foreground border-border"
                 />
               </div>
               <button
                 onClick={() => copyToClipboard(outputUrls, "main")}
                 title="将转换后的所有链接复制到剪贴板"
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center gap-2"
+                className="px-4 py-3 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center justify-center gap-2 touch-feedback min-h-[44px] w-full sm:w-auto"
               >
                 {copyStatus.main || "复制到剪贴板"}
               </button>
@@ -154,11 +154,11 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
               <label className="block text-sm font-medium mb-2 text-foreground">
                 转换后的链接展示
               </label>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
                 {convertedLinks.map((link, index) => (
                   <div
                     key={index}
-                    className="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
+                    className="border border-border rounded-lg p-3 sm:p-4 bg-card hover:bg-accent/50 transition-colors"
                   >
                     <div className="aspect-square mb-3 overflow-hidden rounded-md bg-muted">
                       <img
@@ -175,11 +175,11 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                       <p className="text-xs text-muted-foreground truncate">
                         {link}
                       </p>
-                      <div className="flex gap-2">
+                      <div className="flex flex-col sm:flex-row gap-2">
                         <button
                           onClick={() => copyToClipboard(link, `link-${index}`)}
                           title="复制这个图片链接到剪贴板"
-                          className="px-2 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
+                          className="px-3 py-2 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors touch-feedback min-h-[44px]"
                         >
                           {copyStatus[`link-${index}`] || "复制链接"}
                         </button>
@@ -188,7 +188,7 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                           target="_blank"
                           rel="noopener noreferrer"
                           title="在新标签页中打开这个图片链接"
-                          className="px-2 py-1 text-xs border border-border rounded hover:bg-accent transition-colors text-foreground"
+                          className="px-3 py-2 text-xs border border-border rounded hover:bg-accent transition-colors text-foreground text-center touch-feedback min-h-[44px] flex items-center justify-center"
                         >
                           打开链接
                         </a>

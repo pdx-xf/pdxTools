@@ -21,6 +21,13 @@ const geistMono = localFont({
 export const metadata: Metadata = {
   title: "pdxUtils",
   description: "pdxUtils",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+    viewportFit: 'cover',
+  },
 };
 
 export default function RootLayout({
@@ -46,7 +53,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased mobile-container`}
       >
         <ThemeProvider
           attribute="class"
@@ -54,7 +61,7 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <div className={"px-5 "}>
+          <div className={"px-5 mobile-padding"}>
             <Header />
             {children}
             <Analytics />

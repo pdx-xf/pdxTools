@@ -103,39 +103,50 @@ const CommaSeparatedLinkString = () => {
     },
   ];
   return (
-    <div className={" text-xs"}>
+    <div className="text-xs mobile-container">
       <Textarea
-        className={"w-full rounded p-2 text-base"}
+        className="w-full rounded p-2 text-base border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
         rows={10}
         name=""
         id=""
         value={needChangeValue}
         onChange={onNeedChangeValue}
+        placeholder="请输入需要处理的文本..."
       ></Textarea>
-      <div className={"my-5 flex justify-start items-center"}>
-        <Input
-          type="text"
-          className={"w-[50px] rounded text-base"}
-          value={splitValue}
-          onChange={(e) => setSplitValue(e.target.value)}
-        />
-        {optionList.map((item) => (
-          <Button
-            key={item.name}
-            className={"mx-2 text-base"}
-            onClick={item.fn}
-          >
-            {item.name}
-          </Button>
-        ))}
+      
+      <div className="my-5 flex flex-col sm:flex-row justify-start items-start sm:items-center gap-3">
+        <div className="flex items-center gap-2">
+          <Input
+            type="text"
+            className="w-[50px] rounded text-base border border-gray-300 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            value={splitValue}
+            onChange={(e) => setSplitValue(e.target.value)}
+          />
+          <span className="text-sm text-gray-600 dark:text-gray-400">分隔符</span>
+        </div>
+        
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
+          {optionList.map((item) => (
+            <Button
+              key={item.name}
+              className="text-sm sm:text-base px-3 py-2 touch-feedback min-h-[44px] min-w-[44px]"
+              onClick={item.fn}
+              variant={item.name === "复制" ? "default" : "outline"}
+            >
+              {item.name}
+            </Button>
+          ))}
+        </div>
       </div>
+      
       <Textarea
-        className={"w-full rounded p-2 text-base"}
+        className="w-full rounded p-2 text-base border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-800"
         rows={10}
         name=""
         id=""
         value={changeValue}
         readOnly
+        placeholder="处理结果将显示在这里..."
       ></Textarea>
     </div>
   );
