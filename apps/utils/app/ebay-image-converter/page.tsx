@@ -5,6 +5,7 @@ import { useState } from "react";
 export default function EbayImageConverter() {
   const [inputUrls, setInputUrls] = useState("");
   const [outputUrls, setOutputUrls] = useState("");
+  const [convertedLinks, setConvertedLinks] = useState<string[]>([]);
 
   const convertUrls = () => {
     if (!inputUrls.trim()) return;
@@ -22,11 +23,13 @@ export default function EbayImageConverter() {
       return url.replace(/\.webp/g, ".jpg");
     });
     setOutputUrls(convertedUrls.join("\n"));
+    setConvertedLinks(convertedUrls);
   };
 
   const clearAll = () => {
     setInputUrls("");
     setOutputUrls("");
+    setConvertedLinks([]);
   };
 
   const loadExample = () => {
@@ -41,7 +44,9 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
   return (
     <div className="container mx-auto p-6 max-w-4xl">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold mb-2 text-foreground">eBay图片链接转换器</h1>
+        <h1 className="text-3xl font-bold mb-2 text-foreground">
+          eBay图片链接转换器
+        </h1>
         <p className="text-muted-foreground">
           支持HTML img标签和纯链接，将eBay图片从webp格式转换为jpg格式
         </p>
@@ -85,22 +90,75 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
         </div>
 
         {outputUrls && (
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium mb-2 text-foreground">转换结果</label>
-              <textarea
-                value={outputUrls}
-                readOnly
-                rows={8}
-                className="w-full p-3 border rounded-md font-mono text-sm bg-background text-foreground border-border"
-              />
+          <div className="space-y-6">
+            {/* 原始文本结果 */}
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-2 text-foreground">
+                  转换结果 (文本格式)
+                </label>
+                <textarea
+                  value={outputUrls}
+                  readOnly
+                  rows={8}
+                  className="w-full p-3 border rounded-md font-mono text-sm bg-background text-foreground border-border"
+                />
+              </div>
+              <button
+                onClick={() => navigator.clipboard.writeText(outputUrls)}
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+              >
+                复制到剪贴板
+              </button>
             </div>
-            <button
-              onClick={() => navigator.clipboard.writeText(outputUrls)}
-              className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
-            >
-              复制到剪贴板
-            </button>
+
+            {/* 转换后的链接展示 */}
+            <div className="space-y-4">
+              <label className="block text-sm font-medium mb-2 text-foreground">
+                转换后的链接展示
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {convertedLinks.map((link, index) => (
+                  <div
+                    key={index}
+                    className="border border-border rounded-lg p-4 bg-card hover:bg-accent/50 transition-colors"
+                  >
+                    <div className="aspect-square mb-3 overflow-hidden rounded-md bg-muted">
+                      <img
+                        src={link}
+                        alt={`转换后的图片 ${index + 1}`}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          e.currentTarget.src =
+                            "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect width='200' height='200' fill='%23f3f4f6'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b7280' font-size='14'%3E图片加载失败%3C/text%3E%3C/svg%3E";
+                        }}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <p className="text-xs text-muted-foreground truncate">
+                        {link}
+                      </p>
+                      <div className="flex gap-2">
+                        <button
+                          onClick={() => navigator.clipboard.writeText(link)}
+                          className="px-2 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
+                        >
+                          复制链接
+                        </button>
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-2 py-1 text-xs border border-border rounded hover:bg-accent transition-colors text-foreground"
+                        >
+                          打开链接
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
