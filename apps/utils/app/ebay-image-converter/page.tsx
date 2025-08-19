@@ -6,30 +6,39 @@ export default function EbayImageConverter() {
   const [inputUrls, setInputUrls] = useState("");
   const [outputUrls, setOutputUrls] = useState("");
   const [convertedLinks, setConvertedLinks] = useState<string[]>([]);
+  const [isConverting, setIsConverting] = useState(false);
+  const [copyStatus, setCopyStatus] = useState<{ [key: string]: string }>({});
 
-  const convertUrls = () => {
+  const convertUrls = async () => {
     if (!inputUrls.trim()) return;
 
-    const urls = inputUrls.split("\n").filter((url) => url.trim());
-    const convertedUrls = urls.map((url) => {
-      // 处理HTML img标签格式，转换为纯链接
-      if (url.includes("<img src=")) {
-        const match = url.match(/<img src="([^"]+)\.webp"/);
-        if (match) {
-          return `${match[1]}.jpg`;
+    setIsConverting(true);
+
+    // 模拟转换过程，给用户更好的反馈
+    setTimeout(() => {
+      const urls = inputUrls.split("\n").filter((url) => url.trim());
+      const convertedUrls = urls.map((url) => {
+        // 处理HTML img标签格式，转换为纯链接
+        if (url.includes("<img src=")) {
+          const match = url.match(/<img src="([^"]+)\.webp"/);
+          if (match) {
+            return `${match[1]}.jpg`;
+          }
         }
-      }
-      // 处理纯链接格式，直接转换扩展名
-      return url.replace(/\.webp/g, ".jpg");
-    });
-    setOutputUrls(convertedUrls.join("\n"));
-    setConvertedLinks(convertedUrls);
+        // 处理纯链接格式，直接转换扩展名
+        return url.replace(/\.webp/g, ".jpg");
+      });
+      setOutputUrls(convertedUrls.join("\n"));
+      setConvertedLinks(convertedUrls);
+      setIsConverting(false);
+    }, 500);
   };
 
   const clearAll = () => {
     setInputUrls("");
     setOutputUrls("");
     setConvertedLinks([]);
+    setCopyStatus({});
   };
 
   const loadExample = () => {
@@ -39,6 +48,21 @@ export default function EbayImageConverter() {
 https://i.ebayimg.com/images/g/Xr8AAOSw7vNoO02R/s-l1600.webp
 https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
     setInputUrls(exampleUrls);
+  };
+
+  const copyToClipboard = async (text: string, key: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopyStatus((prev) => ({ ...prev, [key]: "已复制!" }));
+      setTimeout(() => {
+        setCopyStatus((prev) => ({ ...prev, [key]: "" }));
+      }, 2000);
+    } catch (err) {
+      setCopyStatus((prev) => ({ ...prev, [key]: "复制失败" }));
+      setTimeout(() => {
+        setCopyStatus((prev) => ({ ...prev, [key]: "" }));
+      }, 2000);
+    }
   };
 
   return (
@@ -70,18 +94,30 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
           <div className="flex gap-2">
             <button
               onClick={convertUrls}
-              className="px-4 py-2 bg-primary text-primary-foreground rounded-md hover:bg-primary/90 transition-colors"
+              disabled={isConverting || !inputUrls.trim()}
+              title={
+                !inputUrls.trim()
+                  ? "请先输入要转换的链接"
+                  : "点击将webp格式的eBay图片链接转换为jpg格式"
+              }
+              className={`px-4 py-2 rounded-md transition-colors ${
+                isConverting || !inputUrls.trim()
+                  ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                  : "bg-primary text-primary-foreground hover:bg-primary/90"
+              }`}
             >
-              转换链接
+              {isConverting ? "转换中..." : "转换链接"}
             </button>
             <button
               onClick={loadExample}
+              title="加载一些示例链接，帮助您了解支持的格式"
               className="px-4 py-2 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground"
             >
               加载示例
             </button>
             <button
               onClick={clearAll}
+              title="清空所有输入和输出内容"
               className="px-4 py-2 border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors bg-background text-foreground"
             >
               清空
@@ -105,10 +141,11 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                 />
               </div>
               <button
-                onClick={() => navigator.clipboard.writeText(outputUrls)}
-                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors"
+                onClick={() => copyToClipboard(outputUrls, "main")}
+                title="将转换后的所有链接复制到剪贴板"
+                className="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition-colors flex items-center gap-2"
               >
-                复制到剪贴板
+                {copyStatus.main || "复制到剪贴板"}
               </button>
             </div>
 
@@ -140,15 +177,17 @@ https://i.ebayimg.com/images/g/f-0AAOSwipFoO02S/s-l1600.webp`;
                       </p>
                       <div className="flex gap-2">
                         <button
-                          onClick={() => navigator.clipboard.writeText(link)}
+                          onClick={() => copyToClipboard(link, `link-${index}`)}
+                          title="复制这个图片链接到剪贴板"
                           className="px-2 py-1 text-xs bg-primary text-primary-foreground rounded hover:bg-primary/90 transition-colors"
                         >
-                          复制链接
+                          {copyStatus[`link-${index}`] || "复制链接"}
                         </button>
                         <a
                           href={link}
                           target="_blank"
                           rel="noopener noreferrer"
+                          title="在新标签页中打开这个图片链接"
                           className="px-2 py-1 text-xs border border-border rounded hover:bg-accent transition-colors text-foreground"
                         >
                           打开链接
